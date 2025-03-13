@@ -4,7 +4,9 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
       }
     },
     {
@@ -29,6 +31,18 @@
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/index/hot/hot",
+      "style": {
+        "navigationBarTitleText": "热门推荐"
+      }
+    },
+    {
+      "path": "pages/hot/hot",
+      "style": {
+        "navigationBarTitleText": "hot"
       }
     }
   ],
@@ -70,5 +84,17 @@
         "selectedIconPath": "static/tabs/user_selected.png"
       }
     ]
+  },
+  "easycom": {
+    // 是否开启自动扫描
+    "autoscan": true,
+    //
+    "custom": {
+      // 以正则方式自定义组件匹配规则
+      // uni-ui 规则如下配置
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+      // 以Xtx开头的组件，在components文件夹中查找引用
+      "^Xtx(.*)": "@/components/Xtx$1.vue"
+    }
   }
 }

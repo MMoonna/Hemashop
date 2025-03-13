@@ -50,6 +50,9 @@ importers:
       '@dcloudio/uni-quickapp-webview':
         specifier: 3.0.0-alpha-3081220230802001
         version: 3.0.0-alpha-3081220230802001(postcss@8.4.28)(vue@3.3.4)
+      '@dcloudio/uni-ui':
+        specifier: ^1.5.7
+        version: 1.5.7
       pinia:
         specifier: 2.0.27
         version: 2.0.27(typescript@5.1.6)(vue@3.3.4)
@@ -87,6 +90,9 @@ importers:
       '@types/node':
         specifier: ^18.11.9
         version: 18.11.10
+      '@types/wechat-miniprogram':
+        specifier: ^3.4.8
+        version: 3.4.8
       '@uni-helper/uni-app-types':
         specifier: 1.0.0-alpha.6
         version: 1.0.0-alpha.6(typescript@5.1.6)(vue@3.3.4)
@@ -844,6 +850,9 @@ packages:
   '@dcloudio/uni-stat@3.0.0-alpha-3081220230802001':
     resolution: {integrity: sha512-A3tfKOkdbdbFlTStA9rWkwHp7OxyXXHmowGPvnxD/xoKippEWg9n3SOsh98ow1HNc9mcha1i8thBHawUnsna6g==}
 
+  '@dcloudio/uni-ui@1.5.7':
+    resolution: {integrity: sha512-DugxSIrQrze1FLdUOj9a+JEQ0bHGjnJTcGUK1mN/MivKg7nuKJBRWk5Ipa9sUdoBznX6ndz5h2e7Uao6x1CdCw==}
+
   '@dcloudio/uni-vue-devtools@3.0.0-alpha-3080220230511001':
     resolution: {integrity: sha512-dpDEnWF5hTsPve2pII/srsQYc6wdZbUt9Ejwy57TfuRz6JmPv+IBLTlGkIiZFo1RgQ3GmYyyFzKPuKiMfeLjIg==}
 
@@ -1512,6 +1521,9 @@ packages:
 
   '@types/stack-utils@2.0.1':
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
+
+  '@types/wechat-miniprogram@3.4.8':
+    resolution: {integrity: sha512-lOqddA707X3SZxVhlZNBZPzYzj7lG/ED2fF30k+aE2oT6R4wfw0Wiup2k2hGrmzYUFyJXfGs01sDCuJMhQMAdg==}
 
   '@types/yargs-parser@21.0.0':
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -5331,6 +5343,8 @@ snapshots:
       - ts-node
       - vue
 
+  '@dcloudio/uni-ui@1.5.7': {}
+
   '@dcloudio/uni-vue-devtools@3.0.0-alpha-3080220230511001(postcss@8.4.28)(vue@3.3.4)':
     dependencies:
       '@dcloudio/uni-cli-shared': 3.0.0-alpha-3080220230511001(postcss@8.4.28)(vue@3.3.4)
@@ -6134,6 +6148,8 @@ snapshots:
   '@types/semver@7.3.13': {}
 
   '@types/stack-utils@2.0.1': {}
+
+  '@types/wechat-miniprogram@3.4.8': {}
 
   '@types/yargs-parser@21.0.0': {}
 
