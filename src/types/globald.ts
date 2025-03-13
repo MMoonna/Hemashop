@@ -9,3 +9,12 @@ export type PageListParams = {
   page?: number
   pageSize?: number
 }
+export type GoodsItem = {
+  id: string
+  name: string
+  picture: string
+  desc: string
+  price: number
+  discount: number
+  orderNum: number
+}

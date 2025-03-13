@@ -1,3 +1,5 @@
+import type { GoodsItem } from './globald'
+
 export type HomeBanner = {
   id: string
   imgUrl: string
@@ -17,12 +19,4 @@ export type HomeHot = {
   title: string
   type: string
 }
-export type HomeGuess = {
-  id: string
-  name: string
-  picture: string
-  desc: string
-  price: number
-  discount: number
-  orderNum: number
-}
+export type HomeGuess = GoodsItem

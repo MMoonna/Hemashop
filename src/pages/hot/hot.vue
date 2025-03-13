@@ -1,5 +1,10 @@
 // /src/pages/hot/hot.vue
 <script setup lang="ts">
+import { getHotList } from '@/services/hot'
+import type { HotGoodsItem, HotGoodsType } from '@/types/hot'
+import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+
 // 热门推荐页 标题和url
 const hotMap = [
   { type: '1', title: '特惠推荐', url: '/hot/preference' },
@@ -11,39 +16,81 @@ const query = defineProps<{ type: string }>()
 const currentTitle = hotMap.find((item) => item.type === query.type)
 // 动态设置标题
 uni.setNavigationBarTitle({ title: currentTitle!.title })
+//推荐封面图
+const bannerList = ref('')
+// 商品的数据
+const sublist = ref<HotGoodsItem[]>([])
+// 高亮的下标
+const currentindex = ref(0)
+// 子商品的数据
+const gooditem = ref<HotGoodsItem[]>([])
+// 当前tab的id
+const currenttabid = ref('')
+// 获取列表的数据
+const getlist = async () => {
+  const listData = await getHotList(currentTitle!.url)
+  bannerList.value = listData.result.bannerPicture
+  sublist.value = listData.result.subTypes
+}
+const getlistmore = async () => {
+  const currenttab = sublist.value[currentindex.value]
+  currenttabid.value = currenttab.id
+  if (currenttab.goodsItems.page < currenttab.goodsItems.pages) {
+    currenttab.goodsItems.page++
+  } else {
+    return uni.showToast({ title: '没有更多数据了', icon: 'none' })
+  }
+
+  const morelist = await getHotList(currentTitle!.url, {
+    page: currenttab.goodsItems.page,
+    subType: currenttabid.value,
+    pageSize: currenttab.goodsItems.pageSize,
+  })
+  console.log(morelist, 'morelist')
+  currenttab.goodsItems.items.push(...morelist.result.subTypes[currentindex.value].goodsItems.items)
+}
+onLoad(() => {
+  getlist()
+})
 </script>
 
 <template>
   <view class="viewport">
     <!-- 推荐封面图 -->
-    <view class="cover">
-      <image
-        src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-05-20/84abb5b1-8344-49ae-afc1-9cb932f3d593.jpg"
-      ></image>
-    </view>
+    <view class="cover"> <image :src="bannerList"></image> </view>
     <!-- 推荐选项 -->
     <view class="tabs">
-      <text class="text active">抢先尝鲜</text>
-      <text class="text">新品预告</text>
+      <text
+        v-for="(item, index) in sublist"
+        :key="item.id"
+        @click="currentindex = index"
+        class="text"
+        :class="{ active: index == currentindex }"
+        >{{ item.title }}</text
+      >
     </view>
     <!-- 推荐列表 -->
-    <scroll-view scroll-y class="scroll-view">
+    <scroll-view
+      scroll-y
+      class="scroll-view"
+      v-for="(item, index) in sublist"
+      :key="item.id"
+      v-show="currentindex == index"
+      @scrolltolower="getlistmore"
+    >
       <view class="goods">
         <navigator
           hover-class="none"
           class="navigator"
-          v-for="goods in 10"
-          :key="goods"
-          :url="`/pages/goods/goods?id=`"
+          v-for="goods in item.goodsItems.items"
+          :key="goods.id"
+          :url="`/pages/goods/goods?id=${goods.id}`"
         >
-          <image
-            class="thumb"
-            src="https://yanxuan-item.nosdn.127.net/5e7864647286c7447eeee7f0025f8c11.png"
-          ></image>
-          <view class="name ellipsis">不含酒精，使用安心爽肤清洁湿巾</view>
+          <image class="thumb" :src="goods.picture"></image>
+          <view class="name ellipsis">{{ goods.name }}</view>
           <view class="price">
             <text class="symbol">¥</text>
-            <text class="number">29.90</text>
+            <text class="number">{{ goods.price }}</text>
           </view>
         </navigator>
       </view>
