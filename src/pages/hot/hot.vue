@@ -19,11 +19,9 @@ uni.setNavigationBarTitle({ title: currentTitle!.title })
 //推荐封面图
 const bannerList = ref('')
 // 商品的数据
-const sublist = ref<HotGoodsItem[]>([])
+const sublist = ref<(HotGoodsItem & { finish?: boolean })[]>([])
 // 高亮的下标
 const currentindex = ref(0)
-// 子商品的数据
-const gooditem = ref<HotGoodsItem[]>([])
 // 当前tab的id
 const currenttabid = ref('')
 // 获取列表的数据
@@ -32,15 +30,16 @@ const getlist = async () => {
   bannerList.value = listData.result.bannerPicture
   sublist.value = listData.result.subTypes
 }
+// 触底加载更多
 const getlistmore = async () => {
   const currenttab = sublist.value[currentindex.value]
   currenttabid.value = currenttab.id
   if (currenttab.goodsItems.page < currenttab.goodsItems.pages) {
     currenttab.goodsItems.page++
   } else {
+    sublist.value[currentindex.value].finish = true
     return uni.showToast({ title: '没有更多数据了', icon: 'none' })
   }
-
   const morelist = await getHotList(currentTitle!.url, {
     page: currenttab.goodsItems.page,
     subType: currenttabid.value,
@@ -94,7 +93,7 @@ onLoad(() => {
           </view>
         </navigator>
       </view>
-      <view class="loading-text">正在加载...</view>
+      <view class="loading-text">{{ item.finish ? '没有更多数据了' : '加载中...' }}</view>
     </scroll-view>
   </view>
 </template>

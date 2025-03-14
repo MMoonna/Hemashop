@@ -16,7 +16,7 @@ const guessRef = ref<XtxGuessInstance>()
 const triggered = ref(false)
 
 const getHomeBannerData = async () => {
-  const res = await getHomeBannerAPI()
+  const res = await getHomeBannerAPI(1)
   bannerList.value = res.result
 }
 const gethomeCategoryData = async () => {

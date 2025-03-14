@@ -2,7 +2,7 @@ import type { PageList, PageListParams } from '@/types/globald'
 import type { HomeBanner, HomeCategory, HomeGuess, HomeHot } from '@/types/home'
 import { http } from '@/utils/http'
 //首页-广告区域-小程序
-export const getHomeBannerAPI = (distributionSite = 1) => {
+export const getHomeBannerAPI = (distributionSite?: number) => {
   return http<HomeBanner[]>({
     method: 'GET',
     url: '/home/banner',
