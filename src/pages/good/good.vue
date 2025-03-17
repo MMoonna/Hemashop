@@ -2,8 +2,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { getGoodDetailAPI } from '@/services/good'
-import { onLoad, onTabItemTap } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app'
 import type { GoodsResult } from '@/types/good'
+import AddressPanel from './components/AddressPanel.vue'
+import ServicePanel from './components/ServicePanel.vue'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -11,8 +13,16 @@ const props = defineProps<{ id: string }>()
 const detailList = ref<GoodsResult>()
 const currentindex = ref(0)
 // 弹出层组件ref
-const popup = ref()
-
+const popup = ref<{
+  open: (type?: UniHelper.UniPopupType) => void
+  close: () => void
+}>()
+const poptype = ref<'address' | 'service'>()
+const openPopup = (type: typeof poptype.value) => {
+  poptype.value = type
+  console.log(poptype.value)
+  popup.value?.open()
+}
 const getGoods = async () => {
   const detailData = await getGoodDetailAPI(props.id)
   detailList.value = detailData.result
@@ -62,15 +72,15 @@ onLoad(() => {
 
       <!-- 操作面板 -->
       <view class="action">
-        <view class="item arrow">
+        <view class="item arrow" @click="openPopup('service')">
           <text class="label">选择</text>
           <text class="text ellipsis"> 请选择商品规格 </text>
         </view>
-        <view class="item arrow">
+        <view class="item arrow" @click="openPopup('address')">
           <text class="label">送至</text>
           <text class="text ellipsis"> 请选择收获地址 </text>
         </view>
-        <view class="item arrow" @click="popup.open()">
+        <view class="item arrow" @click="popup?.open()">
           <text class="label">服务</text>
           <text class="text ellipsis"> 无忧退 快速退款 免费包邮 </text>
         </view>
@@ -141,7 +151,8 @@ onLoad(() => {
     </view>
   </view>
   <uni-popup ref="popup" type="bottom" background-color="#fff">
-    <button @click="popup.close()">关闭</button>
+    <AddressPanel v-if="poptype === 'address'" @close="popup?.close()" />
+    <ServicePanel v-if="poptype === 'service'" @close="popup?.close()" />
   </uni-popup>
 </template>
 
