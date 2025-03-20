@@ -9,10 +9,11 @@ import { getHomeBannerAPI, gethomeCategoryAPI, getHomeHotAPI } from '@/services/
 import type { HomeBanner, HomeCategory, HomeHot } from '@/types/home'
 // import XtxGuess from '@/components/XtxGuess.vue'
 import type { XtxGuessInstance } from '@/types/component'
+import { useGuessList } from '@/hooks'
 const bannerList = ref<HomeBanner[]>([])
 const categoryList = ref<HomeCategory[]>([])
 const hotList = ref<HomeHot[]>([])
-const guessRef = ref<XtxGuessInstance>()
+const { guessRef, getMore } = useGuessList()
 const triggered = ref(false)
 
 const getHomeBannerData = async () => {
@@ -27,18 +28,10 @@ const getHomeHotData = async () => {
   const res = await getHomeHotAPI()
   hotList.value = res.result
 }
-const onScrolltolower = () => {
-  guessRef.value?.loadMore()
-}
 const refreshData = async () => {
   triggered.value = true
   guessRef.value?.restData()
-  await Promise.all([
-    getHomeBannerData(),
-    gethomeCategoryData(),
-    getHomeHotData(),
-    guessRef.value?.loadMore(),
-  ])
+  await Promise.all([getHomeBannerData(), gethomeCategoryData(), getHomeHotData(), getMore])
   triggered.value = false
 }
 const isLoading = ref(false)
@@ -53,7 +46,7 @@ onLoad(async () => {
   <scroll-view
     scroll-y
     class="scroll-view"
-    @scrolltolower="onScrolltolower"
+    @scrolltolower="getMore"
     refresher-enabled
     @refresherrefresh="refreshData"
     :refresher-triggered="triggered"

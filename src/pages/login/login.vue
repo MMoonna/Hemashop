@@ -1,7 +1,9 @@
 // src/pages/login/login.vue
 
 <script setup lang="ts">
-import { getLoginAPI } from '@/services/login'
+import { getLoginAPI, postLoginWxMinSimpleAPI } from '@/services/login'
+import { useMemberStore } from '@/stores'
+import type { LoginResponse } from '@/types/login'
 import { onLoad } from '@dcloudio/uni-app'
 //获取code登录凭证
 let code = ''
@@ -14,7 +16,25 @@ const Getphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
   const encryptedData = ev.detail.encryptedData!
   const iv = ev.detail.iv!
   const res = await getLoginAPI({ encryptedData, code, iv })
-  console.log(res, 'res')
+  loginSuccess(res.result)
+}
+const getwxLogin = async () => {
+  const res = await postLoginWxMinSimpleAPI('13278889364')
+  loginSuccess(res.result)
+}
+// 封装存储函数
+const loginSuccess = (profile: LoginResponse) => {
+  const memberInfo = useMemberStore()
+  memberInfo.setProfile(profile)
+  uni.showToast({
+    title: '登录成功',
+    icon: 'success',
+  })
+  setTimeout(() => {
+    uni.switchTab({
+      url: '/pages/my/my',
+    })
+  }, 500)
 }
 </script>
 
@@ -42,7 +62,7 @@ const Getphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
         </view>
         <view class="options">
           <!-- 通用模拟登录 -->
-          <button>
+          <button @click="getwxLogin">
             <text class="icon icon-phone">模拟快捷登录</text>
           </button>
         </view>
