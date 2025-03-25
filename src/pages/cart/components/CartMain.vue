@@ -53,6 +53,18 @@ const selectedTotal = computed(() => {
 const selectedPrice = computed(() => {
   return selectedList.value.reduce((sum, item) => (sum += item.count * item.nowPrice), 0)
 })
+const gotoPay = () => {
+  if (selectedPrice.value === 0) {
+    uni.showToast({
+      title: '请选择商品',
+      icon: 'none',
+    })
+  }
+  uni.navigateTo({
+    url: '/pageOrder/create/create',
+  })
+}
+
 onShow(() => {
   if (memberInfo.profile) {
     // 获取购物车数据
@@ -126,7 +138,11 @@ onShow(() => {
         <text class="text">合计:</text>
         <text class="amount">{{ selectedPrice }}</text>
         <view class="button-grounp">
-          <view class="button payment-button" :class="{ disabled: selectedTotal === 0 }">
+          <view
+            class="button payment-button"
+            :class="{ disabled: selectedTotal === 0 }"
+            @tap="gotoPay"
+          >
             去结算({{ selectedTotal }})
           </view>
         </view>
